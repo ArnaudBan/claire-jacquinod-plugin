@@ -14,3 +14,6 @@
 
 // Include CPT
 require_once( plugin_dir_path( __FILE__ ) . 'post-types/micro-projet.php' );
+
+// Include taxo
+require_once( plugin_dir_path( __FILE__ ) . 'taxonomies/realisation-type.php' );
