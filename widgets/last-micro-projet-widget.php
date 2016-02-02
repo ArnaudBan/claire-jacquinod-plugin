@@ -56,10 +56,18 @@ class CJ_Last_Micro_Projects_Widget extends WP_Widget {
 
 
 		// Show last micro project
-		$micro_project_query = new WP_Query( array(
+		$micro_project_query_args = array(
 			'post_type' => 'micro-projet',
 			'posts_per_page' => 5,
-		));
+		);
+
+		if( is_singular( 'micro-projet' ) ){
+
+			$micro_project_query_args['post__not_in'] = array( get_the_ID() );
+		}
+	
+
+		$micro_project_query = new WP_Query( $micro_project_query_args );
 
 		if( $micro_project_query->have_posts() ){
 
