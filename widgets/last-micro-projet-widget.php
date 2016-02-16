@@ -1,6 +1,6 @@
 <?php
 /**
- * Widget to display the last micro projects
+ * Widget to display the post of the given post type
  *
  * Date: 30/01/2016
  */
@@ -9,27 +9,27 @@
 /**
  * Register the widget for use in Appearance -> Widgets
  */
-add_action( 'widgets_init', 'cj_last_micro_projects_init' );
+add_action( 'widgets_init', 'cj_widget_recent_post_type' );
 
-function cj_last_micro_projects_init() {
-	register_widget( 'CJ_Last_Micro_Projects_Widget' );
+function cj_widget_recent_post_type() {
+	register_widget( 'CJ_Recent_Post_Type' );
 }
 
 /**
  * Class CJ_Last_Micro_Projects_Widget
  */
-class CJ_Last_Micro_Projects_Widget extends WP_Widget {
+class CJ_Recent_Post_Type extends WP_Widget {
 
 	/**
 	 * Register widget with WordPress.
 	 */
 	public function __construct() {
 		parent::__construct(
-			'last_micro_projects',
-			__( 'Last Micro Projects', 'clairejacquinod' ),
+			'cj_recent_post_type',
+			__( 'Recent Post Type', 'clairejacquinod' ),
 			array(
-				'classname' => 'last_micro_projects',
-				'description' => __( 'Display the last micro projects', 'clairejacquinod' )
+				'classname' => 'cj_recent_post_type',
+				'description' => __( 'Display the lastest post from the selected post type', 'clairejacquinod' )
 			)
 		);
 
@@ -47,6 +47,11 @@ class CJ_Last_Micro_Projects_Widget extends WP_Widget {
 	public function widget( $args, $instance ) {
 
 
+		$instance = wp_parse_args($instance, array(
+			'title'     => '',
+			'post_type' => 'micro-projet'
+		));
+
 		echo $args['before_widget'];
 
 		if ( $instance['title'] ) {
@@ -57,11 +62,11 @@ class CJ_Last_Micro_Projects_Widget extends WP_Widget {
 
 		// Show last micro project
 		$micro_project_query_args = array(
-			'post_type' => 'micro-projet',
+			'post_type' => $instance['post_type'],
 			'posts_per_page' => 5,
 		);
 
-		if( is_singular( 'micro-projet' ) ){
+		if( is_singular() ){
 
 			$micro_project_query_args['post__not_in'] = array( get_the_ID() );
 		}
@@ -110,6 +115,7 @@ class CJ_Last_Micro_Projects_Widget extends WP_Widget {
 
 		$instance                  = array();
 		$instance['title']         = sanitize_text_field( $new_instance['title'] );
+		$instance['post_type']     = sanitize_text_field( $new_instance['post_type'] );
 
 		return $instance;
 	}
@@ -124,15 +130,34 @@ class CJ_Last_Micro_Projects_Widget extends WP_Widget {
 	 */
 	public function form( $instance ) {
 		$defaults = array(
-			'title'        => esc_html__( 'Last Micro Projects', 'clairejacquinod' )
+			'title'        => esc_html__( 'Recent Post', 'clairejacquinod' ),
+			'post_type'    => 'micro-projet'
 		);
 
 		$instance = wp_parse_args( (array) $instance, $defaults );
 		?>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php esc_html_e( 'Title:', 'jetpack' ); ?></label>
+			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php esc_html_e( 'Title'  ); ?></label>
 			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $instance['title'] ); ?>" />
+		</p>
+
+		<p>
+			<label for="<?php echo $this->get_field_id( 'post_type' ); ?>"><?php esc_html_e( 'Post type' ); ?></label>
+			<select id="<?php echo $this->get_field_id( 'post_type' ); ?>" name="<?php echo $this->get_field_name( 'post_type' ); ?>">
+
+				<?php
+				// Get all public post type
+				$post_types = get_post_types( array( 'public' => true ), 'objects' );
+
+				foreach( $post_types as $type ){
+
+					$selected = selected( $instance['post_type'], $type->name, false);
+
+					echo "<option value='{$type->name}' {$selected}>{$type->label}</option>";
+				}
+				?>
+			</select>
 		</p>
 
 		<?php
