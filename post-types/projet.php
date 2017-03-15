@@ -1,6 +1,6 @@
 <?php
 
-function micro_projet_init() {
+function cl_projet_init() {
     register_post_type( 'project', array(
         'labels'            => array(
             'name'                => __( 'Projets', 'claire-jacquinod-plugin' ),
@@ -28,4 +28,4 @@ function micro_projet_init() {
     ) );
 
 }
-add_action( 'init', 'micro_projet_init' );
+add_action( 'init', 'cl_projet_init' );
