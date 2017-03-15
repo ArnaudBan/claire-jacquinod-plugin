@@ -14,6 +14,7 @@
 
 // Include CPT
 require_once( plugin_dir_path( __FILE__ ) . 'post-types/micro-projet.php' );
+require_once( plugin_dir_path( __FILE__ ) . 'post-types/projet.php' );
 require_once( plugin_dir_path( __FILE__ ) . 'post-types/glossary.php' );
 
 // Include taxo
