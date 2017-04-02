@@ -12,13 +12,15 @@
  */
 
 
-// Include CPT
-require_once( plugin_dir_path( __FILE__ ) . 'post-types/micro-projet.php' );
-require_once( plugin_dir_path( __FILE__ ) . 'post-types/projet.php' );
-require_once( plugin_dir_path( __FILE__ ) . 'post-types/glossary.php' );
-
-// Include taxo
-require_once( plugin_dir_path( __FILE__ ) . 'taxonomies/realisation-type.php' );
-
 // Include Widget
 require_once( plugin_dir_path( __FILE__ ) . 'widgets/last-micro-projet-widget.php' );
+
+// Include CPT
+foreach (glob( plugin_dir_path( __FILE__ ) . "/post-types/*.php" ) as $filename){
+    require_once $filename;
+}
+
+// Include taxo
+foreach (glob( plugin_dir_path( __FILE__ ) . "/taxonomies/*.php" ) as $filename){
+    require_once $filename;
+}
