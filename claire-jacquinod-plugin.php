@@ -24,3 +24,20 @@ foreach (glob( plugin_dir_path( __FILE__ ) . "/post-types/*.php" ) as $filename)
 foreach (glob( plugin_dir_path( __FILE__ ) . "/taxonomies/*.php" ) as $filename){
     require_once $filename;
 }
+
+
+add_filter( 'get_the_archive_title', function( $archive_title ){
+
+    if( is_post_type_archive() ){
+        $archive_title = post_type_archive_title( '', false );
+
+    } elseif ( is_tax() ) {
+
+        $archive_title = single_term_title( '', false );
+
+    } elseif ( is_home() ){
+        $archive_title = __( 'News', 'claire-jacquinod-plugin' );
+    }
+
+    return $archive_title;
+});
