@@ -32,7 +32,7 @@ function cl_projet_init() {
 }
 add_action( 'init', 'cl_projet_init' );
 
-add_action('init', 'cl_acf_add_local_field_groups');
+add_action('acf/init', 'cl_acf_add_local_field_groups');
 
 function cl_acf_add_local_field_groups() {
 
@@ -62,6 +62,15 @@ function cl_acf_add_local_field_groups() {
                     'name'  => 'year',
                     'type'  => 'text',
                     'formatting' => 'none',
+                ),
+                array (
+                    'key'   => 'cl-project-more',
+                    'label' => 'En savoir plus',
+                    'name'  => 'project-more',
+                    'type'  => 'wysiwyg',
+                    'media_upload' => 0,
+                    'toolbar' => 'basic',
+                    'delay'     => true
                 ),
             ),
             'location' => array (
